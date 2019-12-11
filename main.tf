@@ -32,4 +32,16 @@ locals {
 
   # Determine if the Size Constraints rule is enabled
   is_size_constraints_enabled = var.enabled && contains(local.actions, var.rule_size_constraints) ? 1 : 0
+
+  # Determine if the CSRF rule is enabled
+  is_csrf_enabled = var.enabled && contains(local.actions, var.rule_csrf) ? 1 : 0
+
+  # Determine if the SSI rule is enabled
+  is_ssi_enabled = var.enabled && contains(local.actions, var.rule_ssi) ? 1 : 0
+
+  # Determine if the IP Blacklist rule is enabled
+  is_ip_blacklist_enabled = var.enabled && contains(local.actions, var.rule_ip_blacklist) ? 1 : 0
+
+  # Determine if Kinesis Firehose Logs is enabled
+  is_kinesis_firehose_logs_enabled = var.enabled && var.kinesis_firehose_logs_enabled ? 1 : 0
 }

@@ -7,14 +7,31 @@ variable "enabled" {
 variable "waf_prefix" {
   type        = string
   description = "A prefix for all named resources."
-  default     = "global"
 }
 
-# Rule: SQL Injection
+# Logging
+variable "kinesis_firehose_logs_enabled" {
+  default     = false
+  description = "Enable/disable advanced logging with kinesis_firehose"
+}
+variable "kinesis_firehose_log_bucket_arn" {
+  default     = "DISABLED"
+  description = "S3 Bucket ARN"
+}
+variable "kinesis_firehose_log_bucket_prefix" {
+  default     = ""
+  description = "Advanced Logging S3 File Path/Prefix."
+}
+variable "kinesis_firehose_log_compression_format" {
+  default     = "GZIP"
+  description = "The compression format."
+}
+
+# sql injection
 variable "rule_sqli" {
   type        = string
   description = "COUNT or BLOCK, any other value will disable this rule entirely."
-  default     = "BLOCK"
+  default     = "DISABLED"
 }
 variable "rule_sqli_priority" {
   type        = number
@@ -32,11 +49,11 @@ variable "rule_sqli_request_headers" {
   default     = ["cookie", "authorization"]
 }
 
-# Rule: Authorization Tokens
+# authorization tokens
 variable "rule_auth_tokens" {
   type        = string
   description = "COUNT or BLOCK, any other value will disable this rule entirely."
-  default     = "DISABLE"
+  default     = "DISABLED"
 }
 variable "rule_auth_tokens_priority" {
   type        = number
@@ -49,11 +66,11 @@ variable "rule_auth_tokens_black_list" {
   default     = []
 }
 
-# Rule: Corss Site Scripting (XSS)
+# xss - cross site scripting
 variable "rule_xss" {
   type        = string
   description = "COUNT or BLOCK, any other value will disable this rule entirely."
-  default     = "BLOCK"
+  default     = "DISABLED"
 }
 variable "rule_xss_priority" {
   type        = number
@@ -71,11 +88,11 @@ variable "rule_xss_request_headers" {
   default     = ["cookie"]
 }
 
-# Rule: Path Traversal
+# rfi lfi - path traversal
 variable "rule_rfi_lfi" {
   type        = string
   description = "COUNT or BLOCK, any other value will disable this rule entirely."
-  default     = "BLOCK"
+  default     = "DISABLED"
 }
 variable "rule_rfi_lfi_priority" {
   type        = number
@@ -93,11 +110,11 @@ variable "rule_rfi_lfi_uri" {
   default     = ["://", "../"]
 }
 
-# Rule: Admin Access
+# admin access
 variable "rule_admin_access" {
   type        = string
   description = "COUNT or BLOCK, any other value will disable this rule entirely."
-  default     = "DISABLE"
+  default     = "DISABLED"
 }
 variable "rule_admin_access_priority" {
   type        = number
@@ -120,11 +137,11 @@ variable "rule_admin_access_paths" {
   default     = ["/admin", "/wp-admin"]
 }
 
-# Rule: PHP
+# php
 variable "rule_php" {
   type        = string
   description = "COUNT or BLOCK, any other value will disable this rule entirely."
-  default     = "BLOCK"
+  default     = "DISABLED"
 }
 variable "rule_php_priority" {
   type        = number
@@ -160,11 +177,11 @@ variable "rule_php_insecure_query_string_parts" {
   ]
 }
 
-# Rule: Size Constraints
+# size constraints
 variable "rule_size_constraints" {
   type        = string
   description = "COUNT or BLOCK, any other value will disable this rule entirely."
-  default     = "BLOCK"
+  default     = "DISABLED"
 }
 variable "rule_size_constraints_priority" {
   type        = number
@@ -199,3 +216,70 @@ variable "rule_size_constraints_header_map" {
     }
   ]
 }
+
+# csrf - cross site request forgery
+variable "rule_csrf" {
+  type        = string
+  description = "COUNT or BLOCK, any other value will disable this rule entirely."
+  default     = "DISABLED"
+}
+variable "rule_csrf_priority" {
+  type        = number
+  description = "The priority in which to execute this rule."
+  default     = 80
+}
+variable "rule_csrf_header" {
+  type = string
+  description = "The name of your CSRF token header."
+  default = "x-csrf-token"
+}
+variable "rule_csrf_size" {
+  type = number
+  description = "The size of your CSRF token."
+  default = 36
+}
+
+# ssi - server-side includes
+variable "rule_ssi" {
+  type        = string
+  description = "COUNT or BLOCK, any other value will disable this rule entirely."
+  default     = "DISABLED"
+}
+variable "rule_ssi_priority" {
+  type        = number
+  description = "The priority in which to execute this rule."
+  default     = 90
+}
+variable "rule_ssi_file_extensions" {
+  type = list(string)
+  description = "A blacklist of file extensions within the URI of a request."
+  default = [".bak",".backup",".cfg",".conf",".config",".ini",".log"]
+}
+variable "rule_ssi_paths" {
+  type = list(string)
+  description = "A blacklist of relative paths within the URI of a request."
+  default = ["/includes"]
+}
+
+# ip blacklist
+variable "rule_ip_blacklist" {
+  type        = string
+  description = "COUNT or BLOCK, any other value will disable this rule entirely."
+  default     = "DISABLED"
+}
+variable "rule_ip_blacklist_priority" {
+  type        = number
+  description = "The priority in which to execute this rule."
+  default     = 20
+}
+variable "rule_ip_blacklist_ipv4" {
+  type        = list(string)
+  description = "A blacklist of IPV4 cidr blocks"
+  default     = []
+}
+variable "rule_ip_blacklist_ipv6" {
+  type        = list(string)
+  description = "A blacklist of IPV6 cidr blocks"
+  default     = []
+}
+

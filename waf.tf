@@ -5,13 +5,21 @@ resource "aws_waf_web_acl" "waf_acl" {
   name        = "${var.waf_prefix}-generic-owasp-acl"
   metric_name = "${var.waf_prefix}genericowaspacl"
 
-  # TODO
-  # Log Configuration
+  # Dynamic block to allow optional configuration of logging_configuration
+  dynamic "logging_configuration" {
+    iterator = x
+    for_each = aws_kinesis_firehose_delivery_stream.log_stream[*].arn
+    content {
+      log_destination = x.value
+    }
+  }
+
 
   default_action {
     type = "Allow"
   }
 
+  # sql injection
   dynamic "rules" {
     iterator = x
     for_each = local.is_sqli_enabled == 1 ? ["enabled"] : []
@@ -24,6 +32,8 @@ resource "aws_waf_web_acl" "waf_acl" {
       type     = "REGULAR"
     }
   }
+
+  # authorization tokens
   dynamic "rules" {
     iterator = x
     for_each = local.is_auth_tokens_enabled == 1 ? ["enabled"] : []
@@ -36,6 +46,8 @@ resource "aws_waf_web_acl" "waf_acl" {
       type     = "REGULAR"
     }
   }
+
+  # corss site scripting
   dynamic "rules" {
     iterator = x
     for_each = local.is_xss_enabled == 1 ? ["enabled"] : []
@@ -48,6 +60,8 @@ resource "aws_waf_web_acl" "waf_acl" {
       type     = "REGULAR"
     }
   }
+
+  # path traversal (rfi-lfi)
   dynamic "rules" {
     iterator = x
     for_each = local.is_rfi_lfi_enabled == 1 ? ["enabled"] : []
@@ -89,9 +103,45 @@ resource "aws_waf_web_acl" "waf_acl" {
     }
   }
 
+  # cross site request forgery
+  dynamic "rules" {
+    iterator = x
+    for_each = local.is_csrf_enabled == 1 ? ["enabled"] : []
+    content {
+      action {
+        type = var.rule_csrf
+      }
+      priority = var.rule_csrf_priority
+      rule_id  = aws_waf_rule.enforce_csrf.id
+      type     = "REGULAR"
+    }
+  }
 
+  # server side includes
+  dynamic "rules" {
+    iterator = x
+    for_each = local.is_ssi_enabled == 1 ? ["enabled"] : []
+    content {
+      action {
+        type = var.rule_ssi
+      }
+      priority = var.rule_ssi_priority
+      rule_id  = aws_waf_rule.detect_ssi.id
+      type     = "REGULAR"
+    }
+  }
 
-
-
-
+  # ip blacklist
+  dynamic "rules" {
+    iterator = x
+    for_each = local.is_ip_blacklist_enabled == 1 ? ["enabled"] : []
+    content {
+      action {
+        type = var.rule_ip_blacklist
+      }
+      priority = var.rule_ip_blacklist_priority
+      rule_id  = aws_waf_rule.detect_blacklisted_ips.id
+      type     = "REGULAR"
+    }
+  }
 }
