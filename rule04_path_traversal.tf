@@ -11,7 +11,7 @@ resource "aws_waf_rule" "detect_rfi_lfi_traversal" {
 }
 resource "aws_waf_byte_match_set" "match_rfi_lfi_traversal" {
   count = local.is_rfi_lfi_enabled
-  name  = "${var.waf_prefix}-generic-detect-rfi-lfi-traversal"
+  name  = "${var.waf_prefix}-generic-match-rfi-lfi-traversal"
 
   dynamic "byte_match_tuples" {
     iterator = x

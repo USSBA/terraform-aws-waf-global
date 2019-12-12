@@ -27,45 +27,6 @@ data "aws_iam_policy_document" "firehose_policy" {
       aws_kinesis_firehose_delivery_stream.log_stream[0].arn,
     ]
   }
-  #statement {
-  #  sid = "SendToCloudwatchLogs"
-  #  actions = [
-  #    "logs:PutLogEvents",
-  #  ]
-  #  resources = [
-  #    "arn:aws:logs:region:account-id:log-group:log-group-name:log-stream:log-stream-name",
-  #  ]
-  #}
-  #statement {
-  #  sid = "TriggerLambdaProcessor"
-  #  actions = [
-  #    "lambda:InvokeFunction",
-  #    "lambda:GetFunctionConfiguration",
-  #  ]
-  #  resources = [
-  #    "arn:aws:lambda:region:account-id:function:function-name:function-version"
-  #  ]
-  #}
-  #statement {
-  #  sid = "UseKms"
-  #  actions = [
-  #    "kms:Decrypt",
-  #    "kms:GenerateDataKey"
-  #  ]
-  #  resources = [
-  #    "arn:aws:kms:region:account-id:key/key-id"
-  #  ]
-  #  condition {
-  #    test     = "StringEquals"
-  #    variable = "kms:ViaService"
-  #    values   = ["s3.region.amazonaws.com"]
-  #  }
-  #  condition {
-  #    test     = "StringLike"
-  #    variable = "kms:EncryptionContext:aws:s3:arn"
-  #    values   = ["${var.kinesis_firehose_log_bucket_arn}/${var.kinesis_firehose_log_bucket_prefix}*"]
-  #  }
-  #}
 }
 data "aws_iam_policy_document" "firehose_principal" {
   count = local.is_kinesis_firehose_logs_enabled

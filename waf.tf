@@ -14,7 +14,7 @@ resource "aws_waf_web_acl" "waf_acl" {
 
 
   default_action {
-    type = "Allow"
+    type = "AllOW"
   }
 
   # sql injection
