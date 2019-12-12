@@ -195,7 +195,7 @@ variable "rule_size_constraints_priority" {
 }
 variable "rule_size_constraints_field_map" {
   type        = list(map(string))
-  description = "A map of fields and their associated size constrant in bytes. (min: 0, max:21474836480)"
+  description = "A map of fields and their associated size constrant in bytes. (0-21474836480)"
   default = [
     {
       size = 4096
@@ -213,7 +213,7 @@ variable "rule_size_constraints_field_map" {
 }
 variable "rule_size_constraints_header_map" {
   type        = list(map(string))
-  description = "A map of headers and their associated size constrant in bytes. (min: 0, max:21474836480)"
+  description = "A map of headers and their associated size constrant in bytes. (0-21474836480)"
   default = [
     {
       size = 4096
