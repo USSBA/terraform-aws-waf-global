@@ -1,12 +1,17 @@
 # Common Variables
 variable "enabled" {
   type        = bool
-  description = "A toggle for creation of all resources in the module."
+  description = "Toggles the creation or deletion of all resources within the module so that certain environmnets can be targeted."
   default     = true
 }
 variable "waf_prefix" {
   type        = string
-  description = "A prefix for all named resources."
+  description = "A prefix to use for all named resources."
+}
+variable "cloudfront_arns" {
+  type        = list(string)
+  description = "A list of CloudFront ARNs to associate."
+  default     = []
 }
 
 # Logging
@@ -123,18 +128,18 @@ variable "rule_admin_access_priority" {
 }
 variable "rule_admin_access_ipv4" {
   type        = list(string)
-  description = "A white list of IPV4 cidr blocks"
+  description = "A whitelist of IPV4 cidr blocks that are permitted to access these paths."
   default     = []
 }
 variable "rule_admin_access_ipv6" {
   type        = list(string)
-  description = "A white list of IPV6 cidr blocks"
+  description = "A whitelist of IPV6 cidr blocks that are permitted to access these paths."
   default     = []
 }
 variable "rule_admin_access_paths" {
   type        = list(string)
   description = "A black list of relative paths."
-  default     = ["/admin", "/wp-admin"]
+  default     = ["/admin"]
 }
 
 # php
@@ -173,7 +178,7 @@ variable "rule_php_insecure_query_string_parts" {
     "auto_prepend_file=",
     "disable_functions=",
     "open_basedir=",
-    "safe_mode=",
+    "safe_mode="
   ]
 }
 
@@ -229,14 +234,14 @@ variable "rule_csrf_priority" {
   default     = 80
 }
 variable "rule_csrf_header" {
-  type = string
+  type        = string
   description = "The name of your CSRF token header."
-  default = "x-csrf-token"
+  default     = "x-csrf-token"
 }
 variable "rule_csrf_size" {
-  type = number
+  type        = number
   description = "The size of your CSRF token."
-  default = 36
+  default     = 36
 }
 
 # ssi - server-side includes
@@ -251,14 +256,14 @@ variable "rule_ssi_priority" {
   default     = 90
 }
 variable "rule_ssi_file_extensions" {
-  type = list(string)
+  type        = list(string)
   description = "A blacklist of file extensions within the URI of a request."
-  default = [".bak",".backup",".cfg",".conf",".config",".ini",".log"]
+  default     = [".bak", ".backup", ".cfg", ".conf", ".config", ".ini", ".log"]
 }
 variable "rule_ssi_paths" {
-  type = list(string)
+  type        = list(string)
   description = "A blacklist of relative paths within the URI of a request."
-  default = ["/includes"]
+  default     = ["/includes"]
 }
 
 # ip blacklist

@@ -40,7 +40,8 @@ resource "aws_waf_xss_match_set" "xss_match_set" {
     content {
       text_transformation = "HTML_ENTITY_DECODE"
       field_to_match {
-        type = x.value
+        type = "HEADER"
+        data = x.value
       }
     }
   }
@@ -50,7 +51,8 @@ resource "aws_waf_xss_match_set" "xss_match_set" {
     content {
       text_transformation = "URL_DECODE"
       field_to_match {
-        type = x.value
+        type = "HEADER"
+        data = x.value
       }
     }
   }

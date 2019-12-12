@@ -1,5 +1,5 @@
 resource "aws_waf_rule" "enforce_csrf" {
-  count = local.is_csrf_enabled
+  count       = local.is_csrf_enabled
   name        = "${var.waf_prefix}-generic-enforce-csrf"
   metric_name = "${var.waf_prefix}genericenforcecsrf"
 
@@ -17,7 +17,7 @@ resource "aws_waf_rule" "enforce_csrf" {
 }
 resource "aws_waf_byte_match_set" "match_csrf_method" {
   count = local.is_csrf_enabled
-  name = "${var.waf_prefix}-generic-match-csrf-method"
+  name  = "${var.waf_prefix}-generic-match-csrf-method"
   byte_match_tuples {
     text_transformation   = "LOWERCASE"
     target_string         = "post"
@@ -30,7 +30,7 @@ resource "aws_waf_byte_match_set" "match_csrf_method" {
 }
 resource "aws_waf_size_constraint_set" "csrf_token_set" {
   count = local.is_csrf_enabled
-  name = "${var.waf_prefix}-generic-match-csrf-token"
+  name  = "${var.waf_prefix}-generic-match-csrf-token"
 
   size_constraints {
     text_transformation = "NONE"

@@ -1,5 +1,5 @@
 resource "aws_waf_rule" "detect_ssi" {
-  count = local.is_ssi_enabled
+  count       = local.is_ssi_enabled
   name        = "${var.waf_prefix}-generic-detect-ssi"
   metric_name = "${var.waf_prefix}genericdetectssi"
   predicates {
@@ -10,7 +10,7 @@ resource "aws_waf_rule" "detect_ssi" {
 }
 resource "aws_waf_byte_match_set" "match_ssi" {
   count = local.is_ssi_enabled
-  name = "${var.waf_prefix}-generic-match-ssi"
+  name  = "${var.waf_prefix}-generic-match-ssi"
   dynamic "byte_match_tuples" {
     iterator = x
     for_each = var.rule_ssi_file_extensions

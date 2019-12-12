@@ -1,5 +1,3 @@
-
-
 resource "aws_waf_web_acl" "waf_acl" {
   count       = var.enabled ? 1 : 0
   name        = "${var.waf_prefix}-generic-owasp-acl"
@@ -28,7 +26,7 @@ resource "aws_waf_web_acl" "waf_acl" {
         type = var.rule_sqli
       }
       priority = var.rule_sqli_priority
-      rule_id  = aws_waf_rule.mitigate_sqli.id
+      rule_id  = aws_waf_rule.mitigate_sqli[0].id
       type     = "REGULAR"
     }
   }
@@ -42,7 +40,7 @@ resource "aws_waf_web_acl" "waf_acl" {
         type = var.rule_auth_tokens
       }
       priority = var.rule_auth_tokens_priority
-      rule_id  = aws_waf_rule.detect_bad_auth_tokens.id
+      rule_id  = aws_waf_rule.detect_bad_auth_tokens[0].id
       type     = "REGULAR"
     }
   }
@@ -56,7 +54,7 @@ resource "aws_waf_web_acl" "waf_acl" {
         type = var.rule_xss
       }
       priority = var.rule_xss_priority
-      rule_id  = aws_waf_rule.mitigate_xss.id
+      rule_id  = aws_waf_rule.mitigate_xss[0].id
       type     = "REGULAR"
     }
   }
@@ -70,7 +68,7 @@ resource "aws_waf_web_acl" "waf_acl" {
         type = var.rule_rfi_lfi
       }
       priority = var.rule_rfi_lfi_priority
-      rule_id  = aws_waf_rule.detect_rfi_lfi_traversal.id
+      rule_id  = aws_waf_rule.detect_rfi_lfi_traversal[0].id
       type     = "REGULAR"
     }
   }
@@ -84,7 +82,7 @@ resource "aws_waf_web_acl" "waf_acl" {
         type = var.rule_php
       }
       priority = var.rule_php_priority
-      rule_id  = aws_waf_rule.detect_php_insecure.id
+      rule_id  = aws_waf_rule.detect_php_insecure[0].id
       type     = "REGULAR"
     }
   }
@@ -98,7 +96,7 @@ resource "aws_waf_web_acl" "waf_acl" {
         type = var.rule_size_constraints
       }
       priority = var.rule_size_constraints_priority
-      rule_id  = aws_waf_rule.restrict_sizes.id
+      rule_id  = aws_waf_rule.restrict_sizes[0].id
       type     = "REGULAR"
     }
   }
@@ -112,7 +110,7 @@ resource "aws_waf_web_acl" "waf_acl" {
         type = var.rule_csrf
       }
       priority = var.rule_csrf_priority
-      rule_id  = aws_waf_rule.enforce_csrf.id
+      rule_id  = aws_waf_rule.enforce_csrf[0].id
       type     = "REGULAR"
     }
   }
@@ -126,7 +124,7 @@ resource "aws_waf_web_acl" "waf_acl" {
         type = var.rule_ssi
       }
       priority = var.rule_ssi_priority
-      rule_id  = aws_waf_rule.detect_ssi.id
+      rule_id  = aws_waf_rule.detect_ssi[0].id
       type     = "REGULAR"
     }
   }
@@ -140,8 +138,15 @@ resource "aws_waf_web_acl" "waf_acl" {
         type = var.rule_ip_blacklist
       }
       priority = var.rule_ip_blacklist_priority
-      rule_id  = aws_waf_rule.detect_blacklisted_ips.id
+      rule_id  = aws_waf_rule.detect_blacklisted_ips[0].id
       type     = "REGULAR"
     }
   }
 }
+resource "aws_wafregional_web_acl_association" "acl_cloudfront_association" {
+  depends_on   = [aws_waf_web_acl.waf_acl]
+  count        = var.enabled == 1 ? length(var.cloudfront_arns) : 0
+  resource_arn = element(var.cloudfront_arns, count.index)
+  web_acl_id   = aws_waf_web_acl.waf_acl[0].id
+}
+

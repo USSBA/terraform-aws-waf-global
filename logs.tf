@@ -80,7 +80,7 @@ data "aws_iam_policy_document" "firehose_principal" {
       ]
     }
     condition {
-      test = "StringEquals"
+      test     = "StringEquals"
       variable = "sts:ExternalId"
       values = [
         local.account_id
@@ -89,8 +89,8 @@ data "aws_iam_policy_document" "firehose_principal" {
   }
 }
 resource "aws_iam_role" "firehose_role" {
-  count = local.is_kinesis_firehose_logs_enabled
-  name  = "${var.waf_prefix}_waf_firehose_role"
+  count              = local.is_kinesis_firehose_logs_enabled
+  name               = "${var.waf_prefix}_waf_firehose_role"
   assume_role_policy = data.aws_iam_policy_document.firehose_principal[0].json
 }
 resource "aws_iam_role_policy" "firehose" {
