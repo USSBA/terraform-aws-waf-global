@@ -1,0 +1,41 @@
+version: 2.1
+
+executors:
+  default:
+    docker:
+      - image: circleci/node
+  docker-awscli:
+    docker:
+      - image: ussba/cc-docker-git-aws
+  docker-poirot:
+    docker:
+      - image: ussba/poirot:3
+
+commands:
+  poirotscan:
+    steps:
+    - checkout
+    - run:
+        name: Scanning for PII (Poirot)
+        command: |
+          poirot --patterns https://raw.githubusercontent.com/USSBA/terraform-aws-waf-global/master/poirot-patterns.txt --revlist="master^..HEAD"
+jobs:
+  poirot:
+    executor: docker-poirot
+    steps:
+    - poirotscan
+  terraform-format-check:
+    docker:
+    - image: hashicorp/terraform:light
+    steps:
+    - checkout
+    - run:
+        name: Check terraform formatting
+        command: |
+          terraform fmt -recursive -check
+workflows:
+  version: 2
+  branch_workflow:
+    jobs:
+    - poirot
+    - terraform-format-check
