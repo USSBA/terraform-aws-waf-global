@@ -142,6 +142,20 @@ resource "aws_waf_web_acl" "waf_acl" {
       type     = "REGULAR"
     }
   }
+
+  # rate limiting
+  dynamic "rules" {
+    iterator = x
+    for_each = local.is_rate_limit_enabled == 1 ? ["enabled"] : []
+    content {
+      action {
+        type = var.rule_rate_limit
+      }
+      priority = var.rule_rate_limit_priority
+      rule_id  = aws_waf_rate_based_rule.rate_limit[0].id
+      type     = "RATE_BASED"
+    }
+  }
 }
 resource "aws_wafregional_web_acl_association" "acl_cloudfront_association" {
   depends_on   = [aws_waf_web_acl.waf_acl]

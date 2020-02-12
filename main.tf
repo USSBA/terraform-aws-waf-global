@@ -42,6 +42,9 @@ locals {
   # Determine if the IP Blacklist rule is enabled
   is_ip_blacklist_enabled = var.enabled && contains(local.actions, var.rule_ip_blacklist) ? 1 : 0
 
+  # Determine if Rate Limiting is enabled
+  is_rate_limit_enabled = var.enabled && contains(local.actions, var.rule_rate_limit) ? 1 : 0
+
   # Determine if Kinesis Firehose Logs is enabled
   is_kinesis_firehose_logs_enabled = var.enabled && var.kinesis_firehose_logs_enabled ? 1 : 0
 }
