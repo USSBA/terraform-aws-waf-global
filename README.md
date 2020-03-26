@@ -73,6 +73,11 @@ module "waf_global" {
   rule_admin_access_ipv4     = []
   rule_admin_access_ipv6     = []
   rule_admin_access_paths    = ["/admin"]
+  # country_of_origin filter
+  rule_country_of_origin = "COUNT"
+  rule_country_of_origin_blacklist_or_whitelist = "whitelist"
+  rule_country_of_origin_set = ["US"]
+  rule_country_of_origin_paths = ["/my/sensitive/path/"] # List of path prefixes
 }
 
 ```
