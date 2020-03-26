@@ -156,6 +156,20 @@ resource "aws_waf_web_acl" "waf_acl" {
       type     = "RATE_BASED"
     }
   }
+
+  # country of origin
+  dynamic "rules" {
+    iterator = x
+    for_each = local.is_country_of_origin_enabled == 1 ? ["enabled"] : []
+    content {
+      action {
+        type = var.rule_country_of_origin
+      }
+      priority = var.rule_country_of_origin_priority
+      rule_id  = aws_waf_rule.country_of_origin_filter[0].id
+      type     = "REGULAR"
+    }
+  }
 }
 resource "aws_wafregional_web_acl_association" "acl_cloudfront_association" {
   depends_on   = [aws_waf_web_acl.waf_acl]

@@ -309,3 +309,30 @@ variable "rule_rate_limit_paths" {
   description = "A list of relative URL paths to rate limit"
   default     = []
 }
+
+# country of origin
+variable "rule_country_of_origin" {
+  type        = string
+  description = "COUNT or BLOCK, any other value will disable this rule entirely."
+  default     = "DISABLED"
+}
+variable "rule_country_of_origin_blacklist_or_whitelist" {
+  type        = string
+  description = "Set this as a blacklist or whitelist"
+  default     = "blacklist"
+}
+variable "rule_country_of_origin_priority" {
+  type        = number
+  description = "The priority in which to execute this rule."
+  default     = 6
+}
+variable "rule_country_of_origin_set" {
+  type        = list(string)
+  description = "A list of country codes to block/allow."
+  default     = ["CN", "HK"]
+}
+variable "rule_country_of_origin_paths" {
+  type        = list(string)
+  description = "A list of paths to include in the waf rule. ex: [\"/my/sensitive/path\",\"/another/path\"]"
+  default     = ["/*"]
+}
