@@ -93,6 +93,28 @@ variable "rule_xss_request_headers" {
   default     = ["cookie"]
 }
 
+# csrf - cross site request forgery
+variable "rule_csrf" {
+  type        = string
+  description = "COUNT or BLOCK, any other value will disable this rule entirely."
+  default     = "DISABLED"
+}
+variable "rule_csrf_priority" {
+  type        = number
+  description = "The priority in which to execute this rule."
+  default     = 80
+}
+variable "rule_csrf_header" {
+  type        = string
+  description = "The name of your CSRF token header."
+  default     = "x-csrf-token"
+}
+variable "rule_csrf_size" {
+  type        = number
+  description = "The size of your CSRF token."
+  default     = 36
+}
+
 # rfi lfi - path traversal
 variable "rule_rfi_lfi" {
   type        = string
@@ -220,28 +242,6 @@ variable "rule_size_constraints_header_map" {
       type = "cookie"
     }
   ]
-}
-
-# csrf - cross site request forgery
-variable "rule_csrf" {
-  type        = string
-  description = "COUNT or BLOCK, any other value will disable this rule entirely."
-  default     = "DISABLED"
-}
-variable "rule_csrf_priority" {
-  type        = number
-  description = "The priority in which to execute this rule."
-  default     = 80
-}
-variable "rule_csrf_header" {
-  type        = string
-  description = "The name of your CSRF token header."
-  default     = "x-csrf-token"
-}
-variable "rule_csrf_size" {
-  type        = number
-  description = "The size of your CSRF token."
-  default     = 36
 }
 
 # ssi - server-side includes
