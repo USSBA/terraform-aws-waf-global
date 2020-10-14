@@ -23,9 +23,8 @@ To contribute simply create a pull request:
 4. Submit a pull request
 5. If there is an issue associated with your pull request link that issue.
 
-For documentation changes you can edit the file directly on GitHub and select the    option to create a pull request with your own branch. 
+For documentation changes you can edit the file directly on GitHub and select the    option to create a pull request with your own branch.
 
 ## Tests and Continuous Integration
 
 All pull requests must pass our continuous integration (CI) tests in order to be     accepted.
-
