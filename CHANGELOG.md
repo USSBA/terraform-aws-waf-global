@@ -1,3 +1,7 @@
+# v2.0.0
+
+- Terraform v0.13 Upgrade
+
 # v1.2.0
 
 - Adding country of origin filter
