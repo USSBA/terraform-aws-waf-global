@@ -1,8 +1,8 @@
 # terraform-aws-waf-global
 
 ## **DEPRECATION NOTICE**
+**THE USSBA WILL BE DEPRECATING THIS MODULE IN THE NEXT 6 MONTHS AND WILL NO LONGER BE MAKING UPDATES TO THIS MODULE.**
 
-With the release of WAFv2, this module will no longer receive major updates. Our efforts will instead be focused on a new WAFv2 module.
 
 ---
 
